@@ -1,17 +1,31 @@
-<div class="card">
-    <div class="card-header">
-        <h2>Register</h2>
-    </div>
-    <div id="id">
-        <form id="signup_form" class="card-body">
-            <label for="username-input-signup">Username</label>
-            <input id="username-input-signup" type="text">
-            <label for="password-input-signup">Password</label>
-            <input id="password-input-signup" type="password">
-
-            <button id="signup_button" type="submit">Signup</button>
-        </form>
-    </div>
+<div class="column">
+<h2 class="title pb-4">create new account:</h2><hr>
+<form class="signup-form">
+  <div>
+    <label for="username-signup">username:</label>
+    <input type="text" id="username-signup" />
+  </div>
+  <div>
+    <label for="email-signup">email:</label>
+    <input type="text" id="email-signup" />
+  </div>
+<div>
+    <label for="twitter-signup">twitter:</label>
+    <input type="text" id="twitter-signup" />
+  </div>
+    <div>
+    <label for="github-signup">github:</label>
+    <input type="text" id="github-signup" />
+  </div>
+  <div>
+    <label for="password-signup">password:</label>
+    <input type="password" id="password-signup" />
+  </div>
+  <div>
+    <button type="submit" class="button is-primary">signup</button>
+  </div>
+</form>
 </div>
 
-<script src="/js/signup.js"></script>
+<!-- javascript file-->
+<script src="/javascript/signup.js"></script>
