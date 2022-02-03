@@ -1,38 +1,49 @@
-const { Model, DataTypes, UUIDV4 } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
+const bcrypt = require('bcrypt');
 const sequelize = require('../config');
-class User extends Model {}
+class User extends Model {
+
+	checkPassword(pwd) {
+		return bcrypt.compareSync(pwd, this.password);
+	}
+}
 User.init(
 	{
 		id: {
-			type: DataTypes.UUID,
-			defaultValue: UUIDV4,
+			type: DataTypes.INTEGER,
+			autoIncrement: true,
 			primaryKey: true,
+			allowNull: false,
 		},
 		username: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		email: {
-			type: DataTypes.STRING,
-			allowNull: false,
-			unique: true,
-			validate: {
-				isEmail: true,
-			}
-		},
 		password: {
 			type: DataTypes.STRING,
 			allowNull: false,
 			validate: {
-				len: [6]
+				len: [3]
 			}
 		}
 	},
 	{
+		hooks: {
+			beforeCreate: async (newUserInfo) => {
+				newUserInfo.password = await bcrypt.hash(newUserInfo.password, 10)
+				return newUserInfo
+			}, 
+			beforeUpdate: async (updateUserInfo) => {
+				updateUserInfo.password = await bcrypt.hash(updateUserInfo.password, 10)
+				return updateUserInfo
+
+		}
+	},
 		sequelize,
 		timestamps: false,
 		freezeTableName: true,
-		modelName: 'user',
+		underscored: true,
+		modelName: 'User'
 	}
 );
 module.exports = User;
