@@ -1,21 +1,113 @@
-// const $email = document.querySelector('#email');
-// const $password = document.querySelector('#password');
-// const $login = document.querySelector('#login');
-// $login.addEventListener('click', async function(event) {
-// 	event.preventDefault();
-// 	console.log($password.value);
-// 	try {
-// 		const response = await fetch('/api/users/login', {
-// 			method: 'POST',
-// 			headers: { 'Content-Type': 'application/json' },
-// 			body: JSON.stringify({
-// 				email: $email.value,
-// 				password: $password.value,
-// 			})
-// 		});
-// 		const data = await response.json();
-// 		window.location.reload();
-// 	} catch (e) {
-// 		console.log(e);
-// 	}
-// });
+// Add post
+
+async function newFormHandler(event) {
+    event.preventDefault();
+  
+    const title = document.querySelector('input[name="post-title"]').value;
+    const post_content = document.querySelector('input[name="post-content"]').value;
+  
+    const response = await fetch(`/api/posts`, {
+      method: 'POST',
+      body: JSON.stringify({
+        title,
+        post_content
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  
+    if (response.ok) {
+      document.location.replace('/dashboard');
+    } else {
+      alert(response.statusText);
+    }
+  }
+  
+  document.querySelector('.new-post-form').addEventListener('submit', newFormHandler);
+
+  // Create post
+
+  async function newFormHandler(event) {
+    event.preventDefault();
+  
+    const title = document.querySelector('input[name="post-title"]').value;
+    const post_content = document.querySelector('input[name="post-content"]').value;
+  
+    const response = await fetch(`/api/posts`, {
+      method: 'POST',
+      body: JSON.stringify({
+        title,
+        post_content
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  
+    if (response.ok) {
+      document.location.replace('/dashboard');
+    } else {
+      alert(response.statusText);
+    }
+  }
+  
+  document.querySelector('.new-post-form').addEventListener('submit', newFormHandler);
+
+  async function editFormHandler(event) {
+    event.preventDefault();
+  
+    const title = document.querySelector('input[name="post-title"]').value;
+    const post_content = document.querySelector('input[name="post-content"]').value;
+    const id = window.location.toString().split('/')[
+        window.location.toString().split('/').length - 1
+      ];
+
+    const response = await fetch(`/api/posts/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            title,
+            post_content
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        document.location.replace('/dashboard/');
+      } else {
+        alert(response.statusText);
+      }
+  }
+  
+  document.querySelector('.edit-post-form').addEventListener('submit', editFormHandler)
+
+  // Delete Post
+
+  async function deleteFormHandler(event) {
+    event.preventDefault();
+    
+    const id = window.location.toString().split('/')[
+        window.location.toString().split('/').length - 1
+      ];
+
+    const response = await fetch(`/api/posts/${id}`, {
+        method: 'DELETE',
+        body: JSON.stringify({
+          post_id: id
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        document.location.replace('/dashboard/');
+      } else {
+        alert(response.statusText);
+      }
+    
+  }
+  
+  document.querySelector('.delete-post-btn').addEventListener('click', deleteFormHandler);
