@@ -1,53 +1,161 @@
 const router = require('express').Router();
-const {User} = require('../../models');
+const { User, Post, Comment } = require('../../models');
+const withAuth = require('../../utils/auth');
 
-// Register the user, it will show the user the homepage
-router.post('/', async (req, res) => {
-    console.log('=========')
-    console.log(req.session)
-    console.log('=========')
+// GET /api/users
+router.get('/', (req, res) => {
+    // Access our User model and run .findAll() method
+    User.findAll({
+        attributes: { exclude: ['password'] }
+    })
+      .then(dbUserData => res.json(dbUserData))
+      .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  });
 
-    try {
-        const newUser = await User.create({
-            username: req.body.username,
-            password: req.body.password,
-        });
-        req.session.save(() => {
-            req.session.userId = newUser.id;
-            req.session.username = newUser.username;
-            req.session.loggedIn = true;
-            res.json(newUser)
-        });
-    } catch (e) {
-    res.status(500).json(e);    
-    }
-})
-
-// If the registered user is not logged in, send to this page
-router.post('/login', async (req, res) => {
-    try {
-        const user = await User.findOne({
-            where: {
-                username: req.body.username,
+// GET /api/users/1
+router.get('/:id', (req, res) => {
+    User.findOne({
+        attributes: { exclude: ['password']},
+        where: {
+          id: req.params.id
+        },
+        include: [
+            {
+              model: Post,
+              attributes: ['id', 'title', 'post_content', 'created_at']
+            },
+            {
+                model: Comment,
+                attributes: ['id', 'comment_text', 'created_at'],
+                include: {
+                  model: Post,
+                  attributes: ['title']
+                }
             }
-        });
-        if (!user) {
-            return res.status(400).json({ message: 'No user found'});
+          ]
+
+    })
+      .then(dbUserData => {
+        if (!dbUserData) {
+          res.status(404).json({ message: 'No user found with this id' });
+          return;
         }
-        const userPassword = user.checkPassword(req.body.password)
-        if (!userPassword) {
-            return res.status(400).json({ message: 'No user found'});
-        } 
-        req.session.save(() => {
-            console.log(req.session)
-            req.session.userId = user.id;
-            req.session.username = user.username;
-            req.session.loggedIn = true;
-            res.json({user, message: 'Welcome'});
-        });
-    } catch (e) {
-        res.status(400).json({ message: 'No user found'});
+        res.json(dbUserData);
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  });
+
+// POST /api/users
+router.post('/', (req, res) => {
+    User.create({
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+      twitter: req.body.twitter,
+      github: req.body.github
+    })
+    .then(dbUserData => {
+      req.session.save(() => {
+        req.session.user_id = dbUserData.id;
+        req.session.username = dbUserData.username;
+        req.session.twitter = dbUserData.twitter;
+        req.session.github = dbUserData.github;
+        req.session.loggedIn = true;
+    
+        res.json(dbUserData);
+      });
+    });
+  });
+
+  // LOGIN
+  router.post('/login', (req, res) => {
+    User.findOne({
+      where: {
+        email: req.body.email
+      }
+    }).then(dbUserData => {
+      if (!dbUserData) {
+        res.status(400).json({ message: 'No user with that email address!' });
+        return;
+      }
+  
+      const validPassword = dbUserData.checkPassword(req.body.password);
+  
+      if (!validPassword) {
+        res.status(400).json({ message: 'Incorrect password!' });
+        return;
+      }
+  
+      req.session.save(() => {
+        // declare session variables
+        req.session.user_id = dbUserData.id;
+        req.session.username = dbUserData.username;
+        req.session.twitter = dbUserData.twitter;
+        req.session.github = dbUserData.github;
+        req.session.loggedIn = true;
+  
+        res.json({ user: dbUserData, message: 'You are now logged in!' });
+      });
+    });
+  });
+
+
+  router.post('/logout', (req, res) => {
+    if (req.session.loggedIn) {
+      req.session.destroy(() => {
+        res.status(204).end();
+      });
     }
-});
+    else {
+      res.status(404).end();
+    }
+  });
+
+// PUT /api/users/1
+router.put('/:id', withAuth, (req, res) => {
+    User.update(req.body, {
+        individualHooks: true,
+        where: {
+            id: req.params.id
+      }
+    })
+      .then(dbUserData => {
+        if (!dbUserData[0]) {
+          res.status(404).json({ message: 'No user found with this id' });
+          return;
+        }
+        res.json(dbUserData);
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  });
+
+// DELETE /api/users/1
+router.delete('/:id', withAuth, (req, res) => {
+    User.destroy({
+      where: {
+        id: req.params.id
+      }
+    })
+      .then(dbUserData => {
+        if (!dbUserData) {
+          res.status(404).json({ message: 'No user found with this id' });
+          return;
+        }
+        res.json(dbUserData);
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  });
 
 module.exports = router;
