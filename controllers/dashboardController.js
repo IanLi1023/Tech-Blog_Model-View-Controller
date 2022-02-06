@@ -33,9 +33,9 @@ router.get('/', auth, (req, res) => {
         const posts = dbPostData.map(post => post.get({ plain: true }));
         res.render('dashboard', { posts, loggedIn: true });
       })
-      .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
+      .catch(e => {
+        console.log(e);
+        res.status(500).json(e);
       });
   });
 
@@ -77,9 +77,9 @@ router.get('/', auth, (req, res) => {
             loggedIn: true
             });
       })
-      .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
+      .catch(e => {
+        console.log(e);
+        res.status(500).json(e);
       });
 });
 
@@ -113,9 +113,9 @@ router.get('/create/', auth, (req, res) => {
         const posts = dbPostData.map(post => post.get({ plain: true }));
         res.render('create-post', { posts, loggedIn: true });
       })
-      .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
+      .catch(e => {
+        console.log(e);
+        res.status(500).json(e);
       });
   });
 

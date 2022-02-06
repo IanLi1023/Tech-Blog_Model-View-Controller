@@ -7,9 +7,9 @@ router.get('/', (req, res) => {
         attributes: { exclude: ['password'] }
     })
       .then(dbUserData => res.json(dbUserData))
-      .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
+      .catch(e => {
+        console.log(e);
+        res.status(500).json(e);
       });
   });
 
@@ -42,9 +42,9 @@ router.get('/:id', (req, res) => {
         }
         res.json(dbUserData);
       })
-      .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
+      .catch(e => {
+        console.log(e);
+        res.status(500).json(e);
       });
   });
 
@@ -119,9 +119,9 @@ router.put('/:id', auth, (req, res) => {
         }
         res.json(dbUserData);
       })
-      .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
+      .catch(e => {
+        console.log(e);
+        res.status(500).json(e);
       });
   });
 
@@ -138,9 +138,9 @@ router.delete('/:id', auth, (req, res) => {
         }
         res.json(dbUserData);
       })
-      .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
+      .catch(e => {
+        console.log(e);
+        res.status(500).json(e);
       });
   });
 

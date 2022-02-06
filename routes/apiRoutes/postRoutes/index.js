@@ -27,9 +27,9 @@ router.get('/', (req, res) => {
       ]
     })
       .then(dbPostData => res.json(dbPostData))
-      .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
+      .catch(e => {
+        console.log(e);
+        res.status(500).json(e);
       });
   });
 
@@ -66,9 +66,9 @@ router.get('/', (req, res) => {
         }
         res.json(dbPostData);
       })
-      .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
+      .catch(e => {
+        console.log(e);
+        res.status(500).json(e);
       });
   });
 
@@ -79,9 +79,9 @@ router.post('/', auth, (req, res) => {
       user_id: req.session.user_id
     })
       .then(dbPostData => res.json(dbPostData))
-      .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
+      .catch(e => {
+        console.log(e);
+        res.status(500).json(e);
       });
 });
 
@@ -102,9 +102,9 @@ router.put('/:id', auth, (req, res) => {
         }
         res.json(dbPostData);
       })
-      .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
+      .catch(e => {
+        console.log(e);
+        res.status(500).json(e);
       });
   });
 
@@ -121,9 +121,9 @@ router.put('/:id', auth, (req, res) => {
         }
         res.json(dbPostData);
       })
-      .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
+      .catch(e => {
+        console.log(e);
+        res.status(500).json(e);
       });
   });
 

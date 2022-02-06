@@ -5,9 +5,9 @@ const auth = require('../../../utils/auth');
 router.get('/', (req, res) => {
     Comment.findAll({})
       .then(dbCommentData => res.json(dbCommentData))
-      .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
+      .catch(e => {
+        console.log(e);
+        res.status(500).json(e);
       });
 });
 
@@ -19,9 +19,9 @@ router.post('/', auth, (req, res) => {
       user_id: req.session.user_id,
     })
       .then(dbCommentData => res.json(dbCommentData))
-      .catch(err => {
-        console.log(err);
-        res.status(400).json(err);
+      .catch(e => {
+        console.log(e);
+        res.status(400).json(e);
       });
   }
 });
@@ -39,9 +39,9 @@ router.delete('/:id', auth, (req, res) => {
           }
           res.json(dbCommentData);
         })
-        .catch(err => {
-          console.log(err);
-          res.status(500).json(err);
+        .catch(e => {
+          console.log(e);
+          res.status(500).json(e);
         });
 });
 
