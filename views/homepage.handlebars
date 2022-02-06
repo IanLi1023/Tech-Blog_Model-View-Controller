@@ -1,8 +1,19 @@
 {{#each posts as |post|}}
-
-{{> post-info post }}
+<div class= "post card ">
+    <header class="title card-header-title card-header has-background-grey-lighter">
+        <span>{{post.title}}</span>
+    </header>
+    <div class="card-content">
+        <div class="content">{{post.post_content}}</div>
+        {{!-- <div class="text-center">
+            <a href="/post/{{post.id}}"><button class="button mb-5 ml-5 is-success">Read More</button></a>
+        </div> --}}
+        <div class="is-pulled-right">
+            created by {{post.user.username}} on {{format_date post.created_at}} |
+            <a href="/post/{{post.id}}">{{post.comments.length}} {{format_plural "comment" post.comments.length}}</a>
+        </div>
+    </div>
 </div>
-
 {{else}}
 <h6 class="pb-4 has-text-centered is-italic">there are currently no posts</h6>
 {{/each}}

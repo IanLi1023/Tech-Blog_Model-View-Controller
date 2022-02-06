@@ -1,17 +1,28 @@
-    <div class="mb-5 pt-3">
-        <a href="/dashboard/create/"><button id="create-post" class="button is-primary is-pulled-right">create post</button></a>
-        
-        <h2 class="title pb-4">dashboard: your posts</h2><hr>
+<div class="mb-5 pt-3">
+    <a href="/dashboard/create/"><button id="create-post" class="button is-primary is-pulled-right">create post</button></a>
+    
+    <h2 class="title pb-4">dashboard: your posts</h2><hr>
+</div>
 {{#if posts.length}}
-    </div>
-
-    {{#each posts as |post|}}
-        {{> post-info post}}
-        
-            <a href="/dashboard/edit/{{post.id}}"><button class="button mb-5 ml-5 is-warning">edit post</button></a>
+<div class="post-list">
+    {{#each posts}}
+    <div class= "post card ">
+        <header class="title card-header-title card-header has-background-grey-lighter">
+            <span>{{this.title}}</span>
+            <span class="is-pulled-right">
+                <a href="/dashboard/edit/{{this.id}}" class=""><button class="button mb-5 ml-5 is-warning">edit post</button></a>
+            </span>
+        </header>
+        <div class="card-content">
+            <div class="content">{{this.post_content}}</div>
+            <div class="is-pulled-right">
+                created by {{this.user.username}} on {{format_date this.created_at}} |
+                <a href="/post/{{this.id}}">{{this.comments.length}} {{format_plural "comment" this.comments.length}}</a>
+            </div>
         </div>
+    </div>
     {{/each}}
-
+</div>
 {{else}}
 <h6 class="pb-4 has-text-centered is-italic">you do not currently have any posts</h6>
 
