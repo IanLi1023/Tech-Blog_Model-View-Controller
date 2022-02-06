@@ -16,10 +16,18 @@ This project uses the Model-View-Controller (MVC) criteria to create a blog  web
 ## Installation
 
 ```
-Clone the git repository, run nmi i in your terminal, create a .env file with the following: DB_NAME='tech_blog_db', DB_USER='root', DB_PASSWORD=password
+Clone the git repository 
+Run npm i in your terminal
+Create a .env file with the following: 
+    DB_NAME='tech_blog_db'
+    DB_USER='root'
+    DB_PASSWORD=password
 ```
 
 ## Usage
+
+[Tech-Blog: Model View Controller](https://radiant-taiga-89078.herokuapp.com/)
+ 
 Visit the website on Heroku. In this application, the user can view posts and visit links as a visitor, create their own account. As an authenticated user, the user can add their own posts and comment on other posts as well. While logged in, users can edit titles and content or delete their own posts. 
     
 ## License
